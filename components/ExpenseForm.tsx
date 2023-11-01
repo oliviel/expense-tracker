@@ -26,7 +26,7 @@ const ExpenseForm = ({
     },
     date: {
       value: defaultValues?.date
-        ? getFormattedDate(defaultValues.date as Date)
+        ? getFormattedDate(new Date(defaultValues.date as Date))
         : "",
       isValid: true,
     },

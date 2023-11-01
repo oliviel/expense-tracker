@@ -1,11 +1,15 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import ExpensesOutput from "../components/ExpensesOutput/ExpensesOutput";
 import { ExpensesContext } from "../store/expenses-context";
 import { getDateMinusDays } from "../util/date";
 import { fecthExpenses } from "../util/http";
+import Loading from "../components/UI/Loading";
+import Error from "../components/UI/Error";
 
 function RecentExpenses() {
   const expensesCtx = useContext(ExpensesContext);
+  const [isFecting, setIsFecthing] = useState(true);
+  const [error, setError] = useState("");
 
   const recentExpenses = expensesCtx.expenses.filter((expense) => {
     const expenseDate = new Date(expense.date);
@@ -15,13 +19,30 @@ function RecentExpenses() {
     return expenseDate >= date7DaysAgo && expenseDate <= today;
   });
 
+  function handleError() {
+    setError("");
+  }
+
   useEffect(() => {
     async function getExpense() {
-      const response = await fecthExpenses();
-      expensesCtx.setExpenses(response);
+      try {
+        const response = await fecthExpenses();
+        expensesCtx.setExpenses(response);
+      } catch (error) {
+        setError("Could not fetch expenses!");
+      }
+      setIsFecthing(false);
     }
     getExpense();
   }, []);
+
+  if (error && !isFecting) {
+    return <Error message={error} onPress={handleError} />;
+  }
+
+  if (isFecting) {
+    return <Loading />;
+  }
 
   return (
     <ExpensesOutput

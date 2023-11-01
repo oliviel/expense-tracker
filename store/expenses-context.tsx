@@ -79,7 +79,7 @@ function ExpensesContextProvider({ children }: Props) {
   }
 
   function deleteExpense(id: string) {
-    dispatch({ type: CountingKind.DELETE, payload: id });
+    dispatch({ type: CountingKind.DELETE, payload: { id } });
   }
 
   function updateExpense(id: string, expenseData: Omit<IExpenses, "id">) {

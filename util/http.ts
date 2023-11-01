@@ -10,6 +10,16 @@ export async function storeExpense(expenseData: object) {
   return data.name;
 }
 
+export function editExpense(id: string, expenseData: object) {
+  return axios.put(`${baseUrl}expenses/${id}.json`, {
+    ...expenseData,
+  });
+}
+
+export function deleteExpense(id: string) {
+  return axios.delete(`${baseUrl}expenses/${id}.json`);
+}
+
 export async function fecthExpenses() {
   const { data } = await axios.get(`${baseUrl}expenses.json`);
 
